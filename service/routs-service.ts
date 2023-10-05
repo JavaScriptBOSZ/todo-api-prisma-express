@@ -29,9 +29,15 @@ export const RoutsService = (app: express.Application, taskService: TaskService,
 
     app.post('/task', async (req, res) => {
         let bodyObj: TaskDTO = req.body
-        let resObj: TaskIdDTO = await taskService.createTask(bodyObj)
-        res.send(resObj);
-        return
+        try {
+            let resObj: TaskIdDTO = await taskService.createTask(bodyObj)
+            res.send(resObj);
+            return
+        }catch (e) {
+            res.status(409).send('Conflict');
+            return
+        }
+
     })
 
     app.delete("/task/:id", async (req, res) => {
@@ -61,9 +67,10 @@ export const RoutsService = (app: express.Application, taskService: TaskService,
 
     app.put("/task/:id", async (req, res) => {
         let id = toNumber(req.params.id);
+        let bodyObj: TaskDTO = req.body
         if (id) {
             try {
-                let taskIdDTO = await taskService.updateTask(id,req.body);
+                let taskIdDTO = await taskService.updateTask(id,bodyObj);
                 res.send(taskIdDTO)
                 return
             } catch (e) {
@@ -77,7 +84,7 @@ export const RoutsService = (app: express.Application, taskService: TaskService,
         let id = toNumber(req.params.id);
         let status = req.params.status;
 
-        if (!id){
+        if (!id) {
             res.status(404).send('Not found');
             return
         }
@@ -101,7 +108,8 @@ export const RoutsService = (app: express.Application, taskService: TaskService,
     app.get("/status/:name", async (req, res) => {
         let name = req.params.name;
         try {
-            res.send(statusService.getStatus(name))
+         await statusService.getStatus(name);
+            res.send(""+await statusService.getStatus(name))
             return
         } catch (e) {
             res.status(404).send('Not found');
@@ -123,10 +131,11 @@ export const RoutsService = (app: express.Application, taskService: TaskService,
     app.delete("/status/:name", async (req, res) => {
         let name = req.params.name;
         try {
-            statusService.removeStatus(name)
+            await statusService.removeStatus(name)
+            res.send()
             return
         } catch (e) {
-            res.status(404).send('Not found');
+            res.status(409).send('Conflict');
             return
         }
     })
@@ -136,7 +145,7 @@ export const RoutsService = (app: express.Application, taskService: TaskService,
         let newName = req.params.newName;
 
         try {
-            res.send(statusService.updateStatus(name,newName))
+            res.send(statusService.updateStatus(name, newName))
             return
         } catch (e) {
             res.status(404).send('Not found');

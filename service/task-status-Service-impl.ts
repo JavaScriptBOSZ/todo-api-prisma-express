@@ -150,7 +150,7 @@ export class TaskStatusServiceImpl implements TaskService, StatusService {
     }
 
     async removeStatus(name: string): Promise<void> {
-        this.prisma.status.delete({
+       await this.prisma.status.delete({
             where: {
                 name: name
             }
@@ -158,7 +158,7 @@ export class TaskStatusServiceImpl implements TaskService, StatusService {
     }
 
     async removeTask(id: number): Promise<void> {
-        this.prisma.task.delete({
+        await this.prisma.task.delete({
             where: {
                 id: id
             }

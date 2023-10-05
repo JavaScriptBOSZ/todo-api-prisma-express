@@ -37,7 +37,7 @@ paths:
       description: "Create task"
       requestBody:
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: "#/components/schemas/TaskDTO"
         required: true
@@ -101,7 +101,7 @@ paths:
           type: "integer"
       requestBody:
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: "#/components/schemas/TaskDTO"
         required: true
@@ -216,8 +216,8 @@ paths:
             '*/*':
               schema:
                 type: object
-        "404":
-          description: "Not Found"
+        "409":
+          description: "Conflict"
           content:
             '*/*':
               schema:
