@@ -5,10 +5,12 @@ import {RoutsService} from "./service/routs-service";
 const prisma = new PrismaClient()
 
 const express = require('express');
+const cors = require('cors');
 const app = express();
-const PORT = 3000;
+const PORT = 3300;
 
 app.use(express.json());
+app.use(cors());
 
 async function main() {
 
