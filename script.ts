@@ -39,6 +39,8 @@ async function main() {
     RoutsService(app,Repo,Repo)
 
     app.listen(PORT)
+
+    // console.log(await Repo.getAllStatus());
 }
 
 main()
